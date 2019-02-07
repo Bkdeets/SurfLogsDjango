@@ -11,6 +11,7 @@
 
 .body {
     font-family: Helvetica Neue;
+    background-color: #edefee;
 }
 
 .down{
@@ -150,7 +151,7 @@
     width: 75%;
     margin: 0 auto;
     border: 2pt solid white;
-    font-size: 2vw;
+    font-size: 2vh;
     color: white;
     font-family: Helvetica Neue;
     padding: 5px;
@@ -165,4 +166,51 @@
 
 #explore_link{
     text-decoration: none;
+}
+
+.svg-wrapper {
+  height: 10%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 25%;
+}
+
+.shape {
+  fill: transparent;
+  stroke-dasharray: 140 540;
+  stroke-dashoffset: -474;
+  stroke-width: 8px;
+  stroke: #19f6e8;
+}
+
+.text {
+  color: white;
+  font-size: 3vh;
+  letter-spacing: 2px;
+  line-height: 32px;
+  position: relative;
+  top: -48px;
+  left: 20px;
+}
+
+@keyframes draw {
+  0% {
+    stroke-dasharray: 140 540;
+    stroke-dashoffset: -474;
+    stroke-width: 8px;
+  }
+  100% {
+    stroke-dasharray: 760;
+    stroke-dashoffset: 0;
+    stroke-width: 4px;
+  }
+}
+
+.svg-wrapper:hover .shape {
+  -webkit-animation: 0.5s draw linear forwards;
+  animation: 0.5s draw linear forwards;
+}
+
+.breaker {
+    height: 400px;
 }
