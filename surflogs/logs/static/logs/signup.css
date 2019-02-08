@@ -1,0 +1,39 @@
+
+.Outer {
+    margin: auto;
+    max-width: 500px;
+    border: 1pt solid lightgray;
+    background-color: white;
+    display: inline-block;
+    vertical-align: center;
+}
+
+.Inner {
+    margin: 0 auto;
+    padding: 40px;
+}
+
+.info {
+    font-size: 16pt;
+    font-color: gray;
+}
+
+.logoWrap {
+    margin: 0 auto;
+    width: 100%;
+}
+
+.slLogo {
+    width: 170px;
+    display: block;
+    margin: auto;
+    padding-top: 20px;
+}
+
+.v-center-table {
+    width: 80%;
+    margin: 0 auto;
+}
+.v-center-table div {
+    vertical-align: middle;
+}

@@ -211,6 +211,49 @@
   animation: 0.5s draw linear forwards;
 }
 
-.breaker {
-    height: 400px;
+.breaker-200 {
+    height: 200px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.padding-20 {
+    padding:20;
+}
+
+.padding-10 {
+    padding:10;
+}
+
+.theme-color {
+    background-color: #19f6e8;
+}
+
+.btn:hover {
+    background-color: #4CAF50;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+}
+
+.svgStuff {
+    border: 1pt solid lightgray;
+    display: inline-block;
+    max-width: 1000px;
+    background-color: white;
+    vertical-align: top;
+}
+
+.padding-40 {
+    padding: 40px;
+}
+
+.center {
+    margin: 0 auto;
+    width: 125px;
+}
+
+.breaker-50 {
+    height: 50px;
 }
