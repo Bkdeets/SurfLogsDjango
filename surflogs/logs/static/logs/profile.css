@@ -1,0 +1,43 @@
+
+
+.top {
+
+}
+
+.row2 {
+    margin: 20px;
+    margin-top:30px;
+}
+
+.profile_pic_div {
+    margin: 0 auto;
+    width: 100%;
+}
+
+.profile_pic {
+    margin:0 auto;
+    display: block;
+    max-width: 325px;
+}
+
+.about {
+    text-align: center;
+}
+
+.stats {
+
+}
+
+
+.name_and_spot {
+    text-align: center;
+}
+
+
+.data {
+    text-align: center;
+}
+
+.bottom {
+
+}

@@ -47,6 +47,7 @@ class Report(models.Model):
     notes =       models.CharField(max_length=200)
     crowd =       models.CharField(max_length=200)
     wind_dir =    models.CharField(max_length=200)
+    wave_height = models.IntegerField(default=0)
 
     def __str__(self):
         return "Report: " + self.spot.name + " at " + str(self.time) + " on " + str(self.date) + "."
@@ -56,13 +57,13 @@ class Session(models.Model):
     date =           models.DateTimeField('session date')
     start_time =     models.TimeField('start time')
     end_time = 	     models.TimeField('end time')
-    report_id =      models.ForeignKey(Report, on_delete=models.CASCADE)
+    report_id =         models.ForeignKey(Report, on_delete=models.CASCADE)
     spot =           models.ForeignKey(Spot, on_delete=models.CASCADE)
     user =           models.ForeignKey(User, on_delete=models.CASCADE)
     notes =          models.CharField(max_length=200)
     waves_caught = 	 models.IntegerField(default=0)
     rating =         models.IntegerField(default=0)
-    #photo =          models.ImageField(upload_to=self.get_image_path, blank=True, null=True)
+    #photos =          models.ImageField(upload_to=self.get_image_path, blank=True, null=True)
 
     def __str__(self):
         return "Session at " + self.spot.name + " from " + str(self.start_time) + " to " + str(self.end_time) + " on " + str(self.date) + "."

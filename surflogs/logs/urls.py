@@ -6,4 +6,5 @@ app_name = 'logs'
 urlpatterns = [
     path('', views.index, name='index'),
     path('<int:session_id>/', views.detail, name='detail'),
+    path('<str:username>/', views.profile, name='profile'),
     ]

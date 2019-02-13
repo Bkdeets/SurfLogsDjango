@@ -1,0 +1,94 @@
+{% load static %}
+{% include "logs/navigation.html" %}
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+    <title>Surf Logs</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'logs/surfLogs.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'logs/profile.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'logs/surfLogs.js' %}" type="text/css">
+</head>
+
+
+<body style="background-color: #f7f8f9">
+    <div class="bodywrap">
+        <section class="top">
+            <div id="row1" class="row">
+                <div class="bio col-md-4">
+                    <div class="profile_pic">
+                        <img src="https://i.imgur.com/BlWTYV9.jpg" class="img-fluid rounded-circle profile_pic" alt="Bio Photo" width="325" height="325">
+                    </div>
+                    <br>
+                    <div class="about">
+                        <p> {{ user.about }} </p>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="name_and_spot">
+                        <h1>{{ user.firstname }} {{ user.lastname }}</h1>
+                        <h5>{{ user.homespot }}</h5>
+                    </div>
+                    <br>
+                    <div class="row row2" id="row2">
+                        <div class="data col-md-12">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p> Sessions: {{numSessions}}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p> Wave Count: {{waveCount}} </p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p> Time Surfed: {{timeSurfed}} </p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p> Average Rating: {{averageRating}} </p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p> Average Length: {{avgSessionLength}} </p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p> Average Waves: {{averageWaveHeight}} </p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p> Last Spot: {{lastSpot}} </p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p> Average Start: {{avgStartTime}} </p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p> Average End: {{avgEndTime}} </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        <hr>
+        <section class="bottom">
+                <div id="main" class="container">
+                    <ul>
+                        {% for session in sessions %}
+                        <li><a href="{% url 'logs:detail' session.session_id %}">{{ session.session_id }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+        </section>
+    </div>
+    {% include "logs/footer.html" %}
+
+</body>
