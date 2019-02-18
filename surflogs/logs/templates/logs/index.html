@@ -115,6 +115,23 @@
                 <p class="info text-center">Sign up to log surf sessions and get real-time updates for your favorite spots.</p>
                 <br>
                 <form method="post">
+                    {% csrf_token %}
+                    {% for field in user_form %}
+                    <p>
+                        {{ field.label_tag }}<br>
+                        {{ field }}
+                        {% if field.help_text %}
+                        {% endif %}
+                        {% for error in field.errors %}
+                        {% endfor %}
+                    </p>
+                    {% endfor %}
+                    <div class="center">
+                        <button type="submit" class="btn theme-color">Get Loggin'</button>
+                    </div>
+                    <p> {{ errors }} </p>
+                </form>
+                <form method="post">
                     <div class="form-group">
                         <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Email">
                     </div>
@@ -132,26 +149,7 @@
 
     </div>
     <div class="breaker-50"></div>
-
-    <div id="main" class="container">
-        <ul>
-            {% for session in sessions %}
-            <li><a href="{% url 'logs:detail' session.session_id %}">{{ session }}</a></li>
-            {% endfor %}
-        </ul>
-    </div>
-
-    <div id="main" class="container">
-        <ul>
-            {% for user in users %}
-            <li><a href="{% url 'logs:profile' user.username %}">{{ user.username }}</a></li>
-            {% endfor %}
-        </ul>
-    </div>
-
-
-
-
+    <a href="{% url 'logs:signin' %}">signin</a>
 
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
