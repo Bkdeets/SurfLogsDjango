@@ -56,6 +56,9 @@ class Profile(models.Model):
     homespot =      models.ForeignKey(Spot, on_delete=models.CASCADE, blank=True, null=True)
     #photo =             models.ImageField(upload_to=self.get_image_path, blank=True, null=True)
 
+    def __str__(self):
+        return user.first_name + " " + user.last_name    
+
 class Report(models.Model):
     report_id =    models.AutoField(primary_key=True)
     date =         models.DateTimeField('report date')

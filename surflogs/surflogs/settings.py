@@ -26,7 +26,8 @@ SECRET_KEY = 'r6cy!bjr#88j)=m9j3b^9%!abaypu7o7uafo730g2(nn4$k2kd'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+LOGIN_REDIRECT_URL = 'profile'
+LOGOUT_REDIRECT_URL = 'logs:index'
 
 # Application definition
 
