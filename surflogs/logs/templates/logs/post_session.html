@@ -1,0 +1,27 @@
+<form method="post">
+{% csrf_token %}
+{% for field in session_post_form %}
+<p>
+    {{ field.label_tag }}<br>
+    {{ field }}
+    {% if field.help_text %}
+    {% endif %}
+    {% for error in field.errors %}
+    {% endfor %}
+</p>
+{% endfor %}
+{% for field in wave_data_form %}
+<p>
+    {{ field.label_tag }}<br>
+    {{ field }}
+    {% if field.help_text %}
+    {% endif %}
+    {% for error in field.errors %}
+    {% endfor %}
+</p>
+{% endfor %}
+<div class="center">
+    <button type="submit" class="btn theme-color">Get Loggin'</button>
+</div>
+<p> {{ errors }} </p>
+</form>
