@@ -44,7 +44,7 @@ def index(request):
         'user_form':form,
         'errors':errors,
     }
-    return render(request, 'logs/index.html', context)
+    return render(request, 'index.html', context)
 ################################################################################
 
 
@@ -159,8 +159,8 @@ def profileEdit(request):
                 'homespot':  profile.homespot,
                 'bio': profile.bio,
              }
-            user_edit_form = UserEditForm(user_fields)
-            profile_edit_form = ProfileForm(profile_fields)
+            user_edit_form = UserEditForm(user_fields, instance=request.user)
+            profile_edit_form = ProfileForm(profile_fields, instance=profile)
 
     context = {
         'user': user,
