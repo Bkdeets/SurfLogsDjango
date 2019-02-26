@@ -1,27 +1,18 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h1 class="mt-2">Post Session</h1>
+
 <form method="post">
 {% csrf_token %}
-{% for field in session_post_form %}
-<p>
-    {{ field.label_tag }}<br>
-    {{ field }}
-    {% if field.help_text %}
-    {% endif %}
-    {% for error in field.errors %}
-    {% endfor %}
-</p>
-{% endfor %}
-{% for field in wave_data_form %}
-<p>
-    {{ field.label_tag }}<br>
-    {{ field }}
-    {% if field.help_text %}
-    {% endif %}
-    {% for error in field.errors %}
-    {% endfor %}
-</p>
-{% endfor %}
+{{ session_post_form|crispy }}
+{{ wave_data_form|crispy }}
 <div class="center">
-    <button type="submit" class="btn theme-color">Get Loggin'</button>
+    <button type="submit" class="btn theme-color">Post</button>
 </div>
 <p> {{ errors }} </p>
 </form>
+{% endblock %}

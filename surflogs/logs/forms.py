@@ -1,5 +1,6 @@
 
 from django.forms import ModelForm
+from django import forms
 from django.contrib.auth.models import User
 from .models import Profile, Session, Report, Wave_Data, Photo
 from django.contrib.auth.forms import UserCreationForm, User
@@ -32,6 +33,9 @@ class ProfileForm(ModelForm):
         )
 
 class SessionForm(ModelForm):
+    notes =          forms.CharField(required=False)
+    waves_caught = 	 forms.IntegerField(required=False)
+    rating =         forms.IntegerField(required=False)
     class Meta:
         model = Session
         fields = (
@@ -56,6 +60,13 @@ class ReportForm(ModelForm):
         )
 
 class WaveDataForm(ModelForm):
+    tide =          forms.CharField(required=False)
+    crowd =         forms.CharField(required=False)
+    wind_dir =      forms.CharField(required=False)
+    wave_height =   forms.IntegerField(required=False)
+    wave_period =   forms.CharField(required=False)
+    wind_speed =    forms.CharField(required=False)
+    conditions =    forms.CharField(required=False)
     class Meta:
         model = Wave_Data
         fields = (
