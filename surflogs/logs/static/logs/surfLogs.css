@@ -238,10 +238,8 @@
 }
 
 .svgStuff {
-    border: 1pt solid lightgray;
     display: inline-block;
     max-width: 800px;
-    background-color: white;
     vertical-align: center;
     height: 70%;
     margin:auto;

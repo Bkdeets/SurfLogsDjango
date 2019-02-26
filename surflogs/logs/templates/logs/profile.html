@@ -20,6 +20,8 @@
 <a href="{% url 'logs:profile_edit' %}">Edit Profile</a>
 <a href="{% url 'logs:logout' %}">Logout</a>
 <a href="{% url 'logs:post_session' %}">Post Session</a>
+<a href="{% url 'logs:upload_photo' %}">Upload Proile Photo</a>
+
 
 
 <body style="background-color: #f7f8f9">
@@ -28,7 +30,7 @@
             <div id="row1" class="row">
                 <div class="bio col-md-4">
                     <div class="profile_pic">
-                        <img src="https://i.imgur.com/BlWTYV9.jpg" class="img-fluid rounded-circle profile_pic" alt="Bio Photo" width="325" height="325">
+                        <img src="{{ user_image }}" class="img-fluid rounded-circle profile_pic" alt="Bio Photo" width="325" height="325">
                     </div>
                     <br>
                     <div class="about">

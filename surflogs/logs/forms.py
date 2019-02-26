@@ -1,7 +1,7 @@
 
 from django.forms import ModelForm
 from django.contrib.auth.models import User
-from .models import Profile, Session, Report, Wave_Data
+from .models import Profile, Session, Report, Wave_Data, Photo
 from django.contrib.auth.forms import UserCreationForm, User
 
 class UserForm(UserCreationForm):
@@ -66,4 +66,12 @@ class WaveDataForm(ModelForm):
             'wave_period',
             'wind_speed',
             'conditions'
+        )
+
+class ImageUploadForm(ModelForm):
+    class Meta:
+        model = Photo
+        fields = (
+            'image',
+            'referencing_id'
         )

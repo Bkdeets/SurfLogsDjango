@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.http import Http404
 from django.urls import reverse
-from .models import Session,Report,Spot,Profile
+from .models import Session,Report,Spot,Profile,Photo
 import numpy as np
 from .forms import *
 from django.contrib.auth.models import User
@@ -12,6 +12,7 @@ from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from itertools import chain
 ################################################################################
+
 
 
 
@@ -94,6 +95,11 @@ def detail(request, session_id):
 def profile(request):
     user = request.user
     if not user.is_anonymous:
+        photo = Photo.objects.all()[0]
+        print(photo.photo_id)
+        print(photo.referencing_id)
+        print(photo.image)
+        userImage = Photo.objects.filter(referencing_id=user.id)
         sessions = Session.objects.filter(user=user)
         reports = Report.objects.filter(user=user)
 
@@ -104,7 +110,9 @@ def profile(request):
             lastSpot = sessions[len(sessions)-1].spot
         else:
             lastSpot = None
+
         avgSessionLength = 0 #np.mean([s.end_time - s.start_time for s in sessions])
+        ## **** STORED FUNCTION for mean **** ##
         timeSurfed = 0 #np.mean([s.end_time - s.start_time for s in sessions])
         averageWaveHeight = 0 #np.mean([r.wave_height for r in reports])
         avgStartTime = 0 #np.mean([s.start_time for s in sessions])
@@ -122,6 +130,7 @@ def profile(request):
             'averageWaveHeight':averageWaveHeight,
             'avgStartTime':avgStartTime,
             'avgEndTime':avgEndTime,
+            'userImage':userImage
         }
         return render(request, 'logs/profile.html',context)
     else:
@@ -250,10 +259,38 @@ def post_session(request):
     }
 
     return render(request, 'logs/post_session.html', context)
-
-
-
 ################################################################################
+
+
+
+### Upload Profile Image #######################################################
+def upload_profile_pic(request):
+    user = request.user
+    profile = user.profile
+    errors = ''
+
+    if request.method == 'POST':
+        form = ImageUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            photo = form.save()
+            return redirect('logs:profile')
+        else:
+            errors = form.errors
+    else:
+        form = ImageUploadForm({'referencing_id':user.id})
+
+
+    context = {
+        'user':user,
+        'form':form,
+        'errors':errors
+    }
+    return render(request, 'logs/upload_photo.html', context)
+################################################################################
+
+
+
+
 
 
 ### Post Report ################################################################
