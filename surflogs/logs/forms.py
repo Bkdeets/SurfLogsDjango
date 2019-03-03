@@ -47,6 +47,12 @@ class SessionForm(ModelForm):
             'rating',
             'notes'
         )
+        widgets = {
+            'date': forms.DateTimeInput( attrs={
+                'class': 'form-control datetimepicker-input',
+                'data-target': '#datetimepicker1'
+            })
+        }
 
 class ReportForm(ModelForm):
     class Meta:

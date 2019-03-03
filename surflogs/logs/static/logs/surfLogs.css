@@ -1,15 +1,16 @@
 .bigBg {
     /* The image used */
-    background-image: url("https://i.imgur.com/EGmKKaU.jpg?1");
+    background-image: url("https://i.imgur.com/HkOmA7x.jpg");
     /* Center and scale the image nicely */
     background-position: top;
     background-repeat: no-repeat;
-    background-size: 100%;
-    width: 100%;
-    padding-bottom: 150px;
+    background-size: cover;
+    height: 100%;
 }
 
+
 .body {
+    height:100%;
     font-family: Helvetica Neue;
     background-color: #edefee;
 }
@@ -233,8 +234,10 @@
 
 .btn:hover {
     background-color: #4CAF50;
+    border-color: transparent;
     -webkit-transition-duration: 0.4s; /* Safari */
     transition-duration: 0.4s;
+
 }
 
 .svgStuff {
@@ -268,4 +271,16 @@
     padding-left: 12%;
     padding-right: 10%;
     padding-top: 8%;
+}
+
+.index_icon {
+    width:100px;
+}
+
+.bottom-fixed {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  text-align: center;
 }

@@ -16,8 +16,8 @@ from itertools import chain
 
 
 
-### Index View #################################################################
-def index(request):
+### Signup View #################################################################
+def signup(request):
     sessions = Session.objects.all()
     user = request.user
     errors = ''
@@ -45,9 +45,15 @@ def index(request):
         'user_form':form,
         'errors':errors,
     }
-    return render(request, 'index.html', context)
+    return render(request, 'logs/signup.html', context)
 ################################################################################
 
+
+
+### Index ######################################################################
+def index(request):
+    return render(request, 'index.html')
+################################################################################
 
 
 ### Signin View ################################################################
@@ -225,13 +231,11 @@ def post_session(request):
         return redirect('logs:signin')
     if user:
         if request.method == 'POST':
-            session_post_form = SessionForm(request.POST)
+            session_post_form = SessionForm(request.POST, instance=user)
             wave_data_form = WaveDataForm(request.POST)
             if session_post_form.is_valid() and wave_data_form.is_valid():
-                session_post_form = user
                 session = session_post_form.save()
                 session.user = user
-
                 wave_data = wave_data_form.save()
                 session.wave_data_id = wave_data
                 wave_data.spot = session.spot
@@ -246,7 +250,7 @@ def post_session(request):
             else:
                 errors = form.errors
         else:
-            session_post_form = SessionForm({'user':user})
+            session_post_form = SessionForm(instance=user)
             wave_data_form = WaveDataForm()
     else:
         return redirect('logs:signin')

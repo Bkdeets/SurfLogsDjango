@@ -1,13 +1,18 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+{% load static %}
+
+
 
 {% block content %}
-<h1 class="mt-2">Upload Profile Photo</h1>
+<h3 class="mt-2">Create your account</h3>
+<hr>
+
 <form method="post">
     {% csrf_token %}
-    {{ form|crispy }}
+    {{ user_form|crispy }}
     <div class="center">
-        <button type="submit" class="btn theme-color">Save</button>
+        <button type="submit" class="btn theme-color">Submit</button>
     </div>
     <p> {{ errors }} </p>
 </form>

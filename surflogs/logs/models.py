@@ -39,7 +39,7 @@ class Session(models.Model):
     wave_data_id =   models.ForeignKey(Wave_Data, on_delete=models.CASCADE)
     spot =           models.ForeignKey(Spot, on_delete=models.CASCADE)
     user =           models.ForeignKey(User, on_delete=models.CASCADE)
-    notes =          models.CharField(max_length=200)
+    notes =          models.TextField(max_length=500, blank=True)
     waves_caught = 	 models.IntegerField(default=0)
     rating =         models.IntegerField(default=0)
 
@@ -63,7 +63,7 @@ class Report(models.Model):
     spot =         models.ForeignKey(Spot, on_delete=models.CASCADE)
     conditions =   models.CharField(max_length=200)
     user =         models.ForeignKey(User, on_delete=models.CASCADE)
-    notes =        models.CharField(max_length=200)
+    notes =        models.TextField(max_length=500, blank=True)
     wave_quality = models.CharField(max_length=200)
 
     def __str__(self):
