@@ -3,6 +3,8 @@ import os
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils import timezone
+
 
 class Spot(models.Model):
     name =                  models.CharField(max_length=200, primary_key=True)
@@ -20,9 +22,9 @@ class Spot(models.Model):
 
 class Wave_Data(models.Model):
     wave_data_id =  models.AutoField(primary_key=True)
-    date =          models.DateTimeField('date')
-    time = 	        models.TimeField('time')
-    spot =          models.ForeignKey(Spot, on_delete=models.CASCADE)
+    date =          models.DateField('date', default=timezone.now)
+    time =          models.TimeField('time', default=timezone.now)
+    spot =          models.ForeignKey(Spot, on_delete=models.CASCADE, default=1)
     tide =          models.CharField(max_length=200)
     crowd =         models.CharField(max_length=200)
     wind_dir =      models.CharField(max_length=200)
@@ -31,13 +33,14 @@ class Wave_Data(models.Model):
     wind_speed =    models.CharField(max_length=200)
     conditions =    models.CharField(max_length=200)
 
+
 class Session(models.Model):
     session_id =     models.AutoField(primary_key=True)
     date =           models.DateTimeField('session date')
     start_time =     models.TimeField('start time')
     end_time = 	     models.TimeField('end time')
-    wave_data_id =   models.ForeignKey(Wave_Data, on_delete=models.CASCADE)
-    spot =           models.ForeignKey(Spot, on_delete=models.CASCADE)
+    wave_data =      models.ForeignKey(Wave_Data, on_delete=models.CASCADE)
+    spot =           models.ForeignKey(Spot, on_delete=models.CASCADE, default=0)
     user =           models.ForeignKey(User, on_delete=models.CASCADE)
     notes =          models.TextField(max_length=500, blank=True)
     waves_caught = 	 models.IntegerField(default=0)
@@ -51,6 +54,7 @@ class Profile(models.Model):
     user =          models.OneToOneField(User, on_delete=models.CASCADE)
     bio =           models.TextField(max_length=500, blank=True)
     homespot =      models.ForeignKey(Spot, on_delete=models.CASCADE, blank=True, null=True)
+    photo =         models.FileField(upload_to='surflogs-photos', default='profile-photos/None/no-img.jpg')
 
     def __str__(self):
         return user.first_name + " " + user.last_name
@@ -58,22 +62,32 @@ class Profile(models.Model):
 
 class Report(models.Model):
     report_id =    models.AutoField(primary_key=True)
-    date =         models.DateTimeField('report date')
-    time = 	       models.TimeField('time')
+    date =         models.DateField('date',default=timezone.now)
+    time =         models.TimeField('time',default=timezone.now)
     spot =         models.ForeignKey(Spot, on_delete=models.CASCADE)
-    conditions =   models.CharField(max_length=200)
     user =         models.ForeignKey(User, on_delete=models.CASCADE)
+    wave_data =    models.ForeignKey(Wave_Data, on_delete=models.CASCADE)
     notes =        models.TextField(max_length=500, blank=True)
     wave_quality = models.CharField(max_length=200)
 
     def __str__(self):
-        return "Report: " + self.spot.name + " at " + str(self.time) + " on " + str(self.date) + "."
+        return "Report: " + self.spot.name + " at " + str(self.date) + "."
 
 
 class Photo(models.Model):
     photo_id =          models.AutoField(primary_key=True)
     referencing_id =    models.IntegerField(null=False)
-    image =             models.ImageField(upload_to = 'media/', default = 'media/None/no-img.jpg')
+    image =             models.ImageField(upload_to = 'media', default = 'media/None/no-img.jpg')
+
+class UserSummary(models.Model):
+    user_id =       models.IntegerField(primary_key=True)
+    username =      models.CharField(max_length=200)
+    bio =           models.TextField(max_length=500, blank=True)
+    homespot =      models.ForeignKey(Spot, on_delete=models.CASCADE, blank=True, null=True)
+    photo =         models.FileField(upload_to='surflogs-photos', default='profile-photos/None/no-img.jpg')
+
+    def __str__(self):
+        return "User Summary: " + self.username
 
 
 @receiver(post_save, sender=User)

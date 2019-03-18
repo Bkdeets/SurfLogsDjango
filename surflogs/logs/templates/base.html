@@ -44,12 +44,27 @@
     </div>
 </body>
 
-    <script>
-      $(function () {
+<script>
+    $(function() {
         $('#datetimepicker1').datetimepicker({
-            format: 'DD/MM/YYYY'
+            format: 'MM/DD/YYYY'
         });
     });
-    </script>
+    $(function() {
+        $('#datetimepicker2').datetimepicker({
+            format: 'MM/DD/YYYY'
+        });
+    });
+    $(function() {
+        $('#datetimepicker3').datetimepicker({
+            format: 'hh:mm A'
+        });
+    });
+    $(function() {
+        $('#datetimepicker4').datetimepicker({
+            format: 'hh:mm A'
+        });
+    });
+</script>
 
 </html>

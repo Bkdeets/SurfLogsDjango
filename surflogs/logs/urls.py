@@ -15,6 +15,8 @@ urlpatterns = [
     path('login/', LoginView.as_view(), name='login'),
     path('feed/', views.feed, name='feed'),
     path('post_session/', views.post_session, name='post_session'),
+    path('post_report/', views.post_report, name='post_report'),
     path('upload_photo/', views.upload_profile_pic, name='upload_photo'),
-    path('signup/', views.signup, name='signup')
-    ]
+    path('signup/', views.signup, name='signup'),
+    path('<str:username>/', views.user_summary, name='user_summary')
+]

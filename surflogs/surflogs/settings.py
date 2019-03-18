@@ -41,9 +41,7 @@ AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 AWS_S3_OBJECT_PARAMETERS = { 'CacheControl': 'max-age=86400', }
 AWS_DEFAULT_ACL = None
-AWS_MEDIA_LOCATION = 'media'
-PRIVATE_FILE_STORAGE = 'surfLogs.storage_backends.MediaStorage'
-DEFAULT_FILE_STORAGE = 'mysite.storage_backends.MediaStorage'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 
 # Application definition
@@ -143,3 +141,23 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+DATETIME_INPUT_FORMATS = [
+     '%Y-%m-%d %H:%M:%S',
+     '%Y-%m-%d %H:%M',
+     '%Y-%m-%d',
+     '%m/%d/%Y %H:%M:%S',
+     '%m/%d/%Y %H:%M',
+     '%m/%d/%Y',
+     '%m/%d/%y %H:%M:%S',
+     '%m/%d/%y %H:%M',
+     '%m/%d/%y',
+     '%m/%d/%y %I:%M %p',
+     ]
+
+DATE_INPUT_FORMATS = [
+    '%m/%d/%Y'
+]
+TIME_INPUT_FORMATS = [
+    '%I:%M %p',
+]

@@ -29,7 +29,8 @@ class ProfileForm(ModelForm):
         model = Profile
         fields = (
             'homespot',
-            'bio'
+            'bio',
+            'photo'
         )
 
 class SessionForm(ModelForm):
@@ -51,6 +52,14 @@ class SessionForm(ModelForm):
             'date': forms.DateTimeInput( attrs={
                 'class': 'form-control datetimepicker-input',
                 'data-target': '#datetimepicker1'
+            }),
+            'start_time': forms.TimeInput( attrs={
+                'class': 'form-control datetimepicker-input',
+                'data-target': '#datetimepicker3'
+            }),
+            'end_time': forms.TimeInput( attrs={
+                'class': 'form-control datetimepicker-input',
+                'data-target': '#datetimepicker4'
             })
         }
 
@@ -64,6 +73,20 @@ class ReportForm(ModelForm):
             'wave_quality',
             'notes'
         )
+        widgets = {
+            'date': forms.DateTimeInput(
+                attrs={
+                    'class': 'form-control datetimepicker-input',
+                    'data-target': '#datetimepicker2'
+                    }
+            ),
+            'time': forms.DateTimeInput(
+                attrs={
+                    'class': 'form-control datetimepicker-input',
+                    'data-target': '#datetimepicker3'
+                    }
+            )
+        }
 
 class WaveDataForm(ModelForm):
     tide =          forms.CharField(required=False)
@@ -82,7 +105,8 @@ class WaveDataForm(ModelForm):
             'wave_height',
             'wave_period',
             'wind_speed',
-            'conditions'
+            'conditions',
+            'spot'
         )
 
 class ImageUploadForm(ModelForm):

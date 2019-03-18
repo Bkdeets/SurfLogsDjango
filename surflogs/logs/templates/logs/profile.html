@@ -20,7 +20,8 @@
 <a href="{% url 'logs:profile_edit' %}">Edit Profile</a>
 <a href="{% url 'logs:logout' %}">Logout</a>
 <a href="{% url 'logs:post_session' %}">Post Session</a>
-<a href="{% url 'logs:upload_photo' %}">Upload Proile Photo</a>
+<a href="{% url 'logs:post_report' %}">Post Report</a>
+
 
 
 
@@ -30,7 +31,7 @@
             <div id="row1" class="row">
                 <div class="bio col-md-4">
                     <div class="profile_pic">
-                        <img src="{{ user_image }}" class="img-fluid rounded-circle profile_pic" alt="Bio Photo" width="325" height="325">
+                        <img src="{{ user.profile.photo.url }}" class="img-fluid rounded-circle profile_pic" alt="Bio Photo" width="325" height="325">
                     </div>
                     <br>
                     <div class="about">
@@ -85,11 +86,21 @@
 
         </section>
         <hr>
-        <section class="bottom">
+        <section class="bottom pb-5 pt-3">
                 <div id="main" class="container">
-                    <ul>
+                    <ul class="list-group">
                         {% for session in sessions %}
-                        <li><a href="{% url 'logs:detail' session.session_id %}">{{ session.session_id }}</a></li>
+                        <li class="list-group-item"><a href="{% url 'logs:detail' session.session_id %}">{{ session }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+        </section>
+        <br>
+        <section class="bottom pb-5 pt-3">
+                <div id="main" class="container">
+                    <ul class="list-group">
+                        {% for user in users %}
+                        <li class="list-group-item"><a href="{% url 'logs:user_summary' user %}">{{ user.username }}</a></li>
                         {% endfor %}
                     </ul>
                 </div>
