@@ -2,13 +2,6 @@ from django.db import connection
 from .models import Report
 
 
-def my_custom_sql(self):
-    with connection.cursor() as cursor:
-        cursor.execute("UPDATE bar SET foo = 1 WHERE baz = %s", [self.baz])
-        cursor.execute("SELECT foo FROM bar WHERE baz = %s", [self.baz])
-        row = cursor.fetchone()
-
-    return row
 
 class RawOperations:
 
@@ -38,7 +31,6 @@ class RawOperations:
 
 
     # Database views
-
     def create_usersummarys(self):
         with connection.cursor() as cursor:
             raw_sql = """
@@ -97,7 +89,12 @@ class RawOperations:
             #     print("Unable to insert new report into Report")
             #     return -1
 
-    def dateTimeConvert(dateString):
+    def execSQL(self,sql,params):
+        with connection.cursor() as cursor:
+            cursor.execute(sql,params)
+            return cursor.fetchall()
+
+    def dateTimeConvert(self,dateString):
 
         date,time,ampm = dateString.split(" ")
         m,d,y = date.split("/")

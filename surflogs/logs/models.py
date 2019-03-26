@@ -62,7 +62,7 @@ class Profile(models.Model):
 
 class Report(models.Model):
     report_id =    models.AutoField(primary_key=True)
-    date =         models.DateField('date',default=timezone.now)
+    date =         models.DateTimeField('date',default=timezone.now)
     time =         models.TimeField('time',default=timezone.now)
     spot =         models.ForeignKey(Spot, on_delete=models.CASCADE)
     user =         models.ForeignKey(User, on_delete=models.CASCADE)

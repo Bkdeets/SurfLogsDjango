@@ -110,6 +110,8 @@ def profile(request):
     user = request.user
     if not user.is_anonymous:
         userImage = user.profile.photo
+        raw_op = RawOperations()
+
         print(userImage)
 
         ## View for user? ##
@@ -118,12 +120,17 @@ def profile(request):
         reports = Report.objects.raw('SELECT * FROM logs_report WHERE user_id = %s',[user.id])
 
         ## Aggregate queries
-        numSessions = Session.objects.raw('SELECT COUNT(*) FROM logs_session WHERE user_id = %s',[user.id])
-        waveCount = Session.objects.raw('SELECT SUM(waves_caught) FROM logs_session WHERE user_id = %s',[user.id])
-        averageRating = Session.objects.raw('SELECT AVERAGE(rating) FROM logs_session WHERE user_id = %s',[user.id])
+        numSessions = raw_op.execSQL('SELECT COUNT(*) FROM logs_session WHERE user_id = %s',[user.id])[0][0]
+        waveCount = raw_op.execSQL('SELECT SUM(waves_caught) FROM logs_session WHERE user_id = %s',[user.id])[0][0]
+        averageRating = raw_op.execSQL('SELECT AVG(rating) FROM logs_session WHERE user_id = %s',[user.id])[0][0]
 
         ## Nested queries
-        averageWaveHeight = Session.objects.raw('SELECT AVERAGE(logs_wave_data.wave_height) FROM wdata,logs_wave_data (SELECT wave_data_id FROM logs_session WHERE user_id = %s AS wdata) WHERE wdata.wave_data_id = logs_wave_data.wave_data_id',[user.id])
+        averageWaveHeight = raw_op.execSQL('SELECT AVG(wave_height) FROM logs_wave_data WHERE (SELECT wave_data_id FROM logs_session WHERE user_id = %s) = logs_wave_data.wave_data_id;',[user.id])[0][0]
+
+        #raw_op.build_stored_functions()
+
+        #level = raw_op.execSQL('UserLevel(%s)',[numSessions])
+        #print(level)
 
         ## Needs time operations queries
         avgSessionLength = 0#Session.objects.raw('SELECT AVERAGE(len) FROM logs_session WHERE user_id = %s',[user.id])
@@ -271,6 +278,8 @@ def feed(request):
 
     sessions = Session.objects.order_by('date')[:30]
     reports = Report.objects.order_by('date')[:30]
+    print(reports)
+    print(sessions)
 
     context = {
         'user':user,
