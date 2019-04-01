@@ -89,6 +89,20 @@ class RawOperations:
             #     print("Unable to insert new report into Report")
             #     return -1
 
+    def create_trigger(self):
+
+        sql_string = "DROP TRIGGER new_session_record;"
+        with connection.cursor() as cursor:
+            cursor.execute(sql_string)
+
+        sql_string = """CREATE TRIGGER new_session_record AFTER INSERT ON logs_session
+                        BEGIN
+                           INSERT INTO logs_session_record VALUES (new.user_id, new.session_id, datetime('now'), null);
+                        END;"""
+
+        with connection.cursor() as cursor:
+            cursor.execute(sql_string)
+
     def execSQL(self,sql,params):
         with connection.cursor() as cursor:
             cursor.execute(sql,params)

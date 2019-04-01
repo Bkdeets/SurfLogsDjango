@@ -43,6 +43,8 @@ AWS_S3_OBJECT_PARAMETERS = { 'CacheControl': 'max-age=86400', }
 AWS_DEFAULT_ACL = None
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
+AWS_PRIVATE_MEDIA_LOCATION = 'surflogs-photos'
+PRIVATE_FILE_STORAGE = 'mysite.storage_backends.PrivateMediaStorage'
 
 # Application definition
 
@@ -57,6 +59,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     'storages',
     'widget_tweaks',
+    'sorl.thumbnail',
+    'bootstrap_modal_forms',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

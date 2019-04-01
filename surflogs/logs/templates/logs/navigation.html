@@ -1,5 +1,5 @@
 <!-- Navigation -->
-<nav id="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top ft2" style="transition: top 0.3s;">
+<nav id="navbar" class="navbar navbar-expand-lg navbar-dark theme-color sticky-top ft2" style="transition: top 0.3s;">
     <div class="container">
         <a class="navbar-brand" href="{% url 'logs:index' %}">Surf Logs</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -16,9 +16,27 @@
                 <li class="nav-item">
                     <a href="{% url 'logs:index' %}" class="nav-link">Sessions</a>
                 </li>
-                <li class="nav-item">
-                    <a href="{% url 'logs:profile' %}" class="nav-link">Profile</a>
+                {% if user.is_authenticated %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Profile
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="{% url 'logs:profile' %}">View Profile</a>
+                        <a class="dropdown-item" href="{% url 'logs:profile_edit' %}">Edit Profile</a>
+                        <a class="dropdown-item" href="{% url 'logs:logout' %}">Logout</a>
+                        <a class="dropdown-item" href="{% url 'logs:post_session' %}">Post Session</a>
+                        <a class="dropdown-item" href="{% url 'logs:post_report' %}">Post Report</a>
+                    </div>
                 </li>
+                {% else %}
+                <li class="nav-item">
+                    <a href="{% url 'logs:signup' %}" class="nav-link">Signup</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'logs:login' %}" class="nav-link">Login</a>
+                </li>
+                {% endif %}
             </ul>
         </div>
     </div>

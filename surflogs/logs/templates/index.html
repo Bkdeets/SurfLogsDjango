@@ -61,7 +61,11 @@
                     <a href="{% url 'logs:signup' %}" class="btn btn-default text-white border-white">Sign Up</a>
                 </div>
                 <div class="col-md-2 text-center pt-3">
-                    <a href="{% url 'logs:login' %}" class="btn btn-default text-white border-white">Sign In</a>
+                    {% if user %}
+                    <a href="{% url 'logs:profile' %}" class="btn btn-default text-white border-white">Profile</a>
+                    {% else %}
+                    <a href="{% url 'logs:login' %}" class="btn btn-default text-white border-white">Login</a>
+                    {% endif %}
                 </div>
                 <div class="col-md-4">
                 </div>

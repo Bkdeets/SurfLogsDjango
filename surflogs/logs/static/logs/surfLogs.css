@@ -63,7 +63,7 @@
 #nav_bar {
     width:1000px;
     margin-left: -15px;
-    background-color: #8FDBF2;
+    background-color: #008695;
     border-radius: 10px;
 }
 
@@ -229,11 +229,11 @@
 }
 
 .theme-color {
-    background-color: #19f6e8;
+    background-color: #3D6D72;
 }
 
 .btn:hover {
-    background-color: #4CAF50;
+    background-color: #77989C;
     border-color: transparent;
     -webkit-transition-duration: 0.4s; /* Safari */
     transition-duration: 0.4s;

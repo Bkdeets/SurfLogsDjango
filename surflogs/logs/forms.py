@@ -2,8 +2,75 @@
 from django.forms import ModelForm
 from django import forms
 from django.contrib.auth.models import User
-from .models import Profile, Session, Report, Wave_Data, Photo
+from .models import Profile, Session, Report, Wave_Data, Photo, Spot
 from django.contrib.auth.forms import UserCreationForm, User
+from PIL import Image
+from bootstrap_modal_forms.forms import BSModalForm
+
+TIDES = (
+    ('L','Low'),
+    ('LR','Low Rising'),
+    ('MR','Mid Rising'),
+    ('H','High'),
+    ('HF','High Falling'),
+    ('MF','Mid Falling')
+)
+
+CROWDS = (
+    ('Solo','Solo'),
+    ('Light','Light'),
+    ('Medium','Medium'),
+    ('Heavy','Heavy'),
+    ('Packed','Packed')
+)
+
+DIRECTIONS = (
+    ('S','S'),
+    ('SSW','SSW'),
+    ('SW','SW'),
+    ('WSW','WSW'),
+    ('WNW','WNW'),
+    ('NW','NW'),
+    ('NNW','NNW'),
+    ('N','N'),
+    ('NNE','NNE'),
+    ('NE','NE'),
+    ('ENE','ENE'),
+    ('E','E'),
+    ('ESE','ESE'),
+    ('SE','SE'),
+    ('SSE','SSE'),
+)
+
+CONDITIONS = (
+    ('Glassy','Glassy'),
+    ('Groomed','Groomed'),
+    ('Textured','Textured'),
+    ('Bumpy','Bumpy'),
+    ('Choppy','Choppy'),
+    ('VAS','Victory At Sea')
+)
+
+RATINGS = [(x,x) for x in range(1,11)]
+
+SPOT_TYPES = (
+    ('Beach','Beach'),
+    ('Reef','Reef'),
+    ('Point','Point'),
+    ('Slab','Slab'),
+    ('Pool','Pool'),
+    ('Wedge','Wedge')
+)
+
+WAVE_QUALITY = (
+    ('Dismal','Dismal'),
+    ('Poor','Poor'),
+    ('Fair','Fair'),
+    ('Good','Good'),
+    ('Great','Great'),
+    ('Epic','Epic'),
+)
+
 
 class UserForm(UserCreationForm):
     class Meta:
@@ -33,10 +100,28 @@ class ProfileForm(ModelForm):
             'photo'
         )
 
+class NewSpotForm(ModelForm):
+    ideal_tide =         forms.ChoiceField(choices=TIDES,required=False)
+    ideal_swell_dir =    forms.ChoiceField(choices=DIRECTIONS,required=False)
+    ideal_wind_dir =    forms.ChoiceField(choices=DIRECTIONS,required=False)
+    type =               forms.ChoiceField(choices=SPOT_TYPES)
+
+    class Meta:
+        model = Spot
+        fields = (
+            'name',
+            'type',
+            'location',
+            'ideal_tide',
+            'ideal_wind_dir',
+            'ideal_swell_dir',
+            'ideal_swell_height',
+            'ideal_swell_period'
+        )
+
 class SessionForm(ModelForm):
-    notes =          forms.CharField(required=False)
     waves_caught = 	 forms.IntegerField(required=False)
-    rating =         forms.IntegerField(required=False)
+    rating =         forms.ChoiceField(choices=RATINGS,required=False)
     class Meta:
         model = Session
         fields = (
@@ -64,6 +149,9 @@ class SessionForm(ModelForm):
         }
 
 class ReportForm(ModelForm):
+
+    wave_quality = forms.ChoiceField(choices=WAVE_QUALITY)
+
     class Meta:
         model = Report
         fields = (
@@ -89,13 +177,13 @@ class ReportForm(ModelForm):
         }
 
 class WaveDataForm(ModelForm):
-    tide =          forms.CharField(required=False)
-    crowd =         forms.CharField(required=False)
-    wind_dir =      forms.CharField(required=False)
+    tide =          forms.ChoiceField(choices=TIDES,required=False)
+    crowd =         forms.ChoiceField(choices=CROWDS,required=False)
+    wind_dir =      forms.ChoiceField(choices=DIRECTIONS,required=False)
     wave_height =   forms.IntegerField(required=False)
     wave_period =   forms.CharField(required=False)
     wind_speed =    forms.CharField(required=False)
-    conditions =    forms.CharField(required=False)
+    conditions =    forms.ChoiceField(choices=CONDITIONS,required=False)
     class Meta:
         model = Wave_Data
         fields = (

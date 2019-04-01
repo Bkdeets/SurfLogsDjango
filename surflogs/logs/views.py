@@ -14,6 +14,8 @@ from itertools import chain
 from .sql import RawOperations
 import datetime
 from django.utils import timezone
+from PIL import Image
+from bootstrap_modal_forms.generic import BSModalCreateView
 ################################################################################
 
 
@@ -22,7 +24,10 @@ from django.utils import timezone
 ### Signup View #################################################################
 def signup(request):
     sessions = Session.objects.all()
-    user = request.user
+    if request.user and request.user.username != '':
+        user = request.user
+    else:
+        user = None
     errors = ''
 
     if request.method == 'POST':
@@ -37,7 +42,7 @@ def signup(request):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            user_summary = UserSummary(user.user_id, user.username)
+            user_summary = UserSummary(user.id, user.username)
             user_summary.save()
             return redirect('logs:profile_edit')
         else:
@@ -58,7 +63,12 @@ def signup(request):
 
 ### Index ######################################################################
 def index(request):
-    return render(request, 'index.html')
+    if request.user and request.user.username != '':
+        user = request.user
+    else:
+        user = None
+
+    return render(request, 'index.html', {'user':user})
 ################################################################################
 
 
@@ -66,12 +76,17 @@ def index(request):
 def signin(request):
     errors = ''
     username = password = ''
+    if request.user and request.user.username != '':
+        user = request.user
+    else:
+        user = None
     if request.POST:
         form = SigninForm(request.POST)
         username = request.POST['username']
         password = request.POST['password']
         if form.is_valid():
             user = authenticate(username=username, password=password)
+
             if user is not None:
                 profile = Profile.objects.filter(user=user)
                 if profile:
@@ -97,27 +112,35 @@ def signin(request):
 
 ### Detail View ################################################################
 def detail(request, session_id):
+    if request.user and request.user.username != '':
+        user = request.user
+    else:
+        user = None
     session = get_object_or_404(Session, pk=session_id)
 
-    #form =
-    return render(request, 'logs/detail.html', {'session': session})
+    context = {
+        'session':session,
+        'user':user,
+    }
+    return render(request, 'logs/detail.html', context)
 ################################################################################
 
 
 ### CSC 455 Version ###
 ### Profile View ###############################################################
 def profile(request):
-    user = request.user
-    if not user.is_anonymous:
+    if request.user and request.user.username != '':
+        user = request.user
+    else:
+        user = None
+    if user:
         userImage = user.profile.photo
         raw_op = RawOperations()
-
-        print(userImage)
 
         ## View for user? ##
         ## can make an sql function with this ##
         sessions = Session.objects.raw('SELECT * FROM logs_session WHERE user_id = %s',[user.id])
-        reports = Report.objects.raw('SELECT * FROM logs_report WHERE user_id = %s',[user.id])
+        reports = Report.objects.filter(user_id = user.id)
 
         ## Aggregate queries
         numSessions = raw_op.execSQL('SELECT COUNT(*) FROM logs_session WHERE user_id = %s',[user.id])[0][0]
@@ -127,32 +150,48 @@ def profile(request):
         ## Nested queries
         averageWaveHeight = raw_op.execSQL('SELECT AVG(wave_height) FROM logs_wave_data WHERE (SELECT wave_data_id FROM logs_session WHERE user_id = %s) = logs_wave_data.wave_data_id;',[user.id])[0][0]
 
+        ## Stored function?
         #raw_op.build_stored_functions()
-
         #level = raw_op.execSQL('UserLevel(%s)',[numSessions])
         #print(level)
 
         ## Needs time operations queries
-        avgSessionLength = 0#Session.objects.raw('SELECT AVERAGE(len) FROM logs_session WHERE user_id = %s',[user.id])
-        # if numSessions[0] > 0:
-        #     lastSpot = None ## query to find most recent spot
-        # else:
-        #     lastSpot = None
-        lastSpot = None
-        timeSurfed = 0 #np.mean([s.end_time - s.start_time for s in sessions])
-        avgStartTime = 0 #np.mean([s.start_time for s in sessions])
-        avgEndTime = 0 #np.mean([s.end_time for s in sessions])
+        if numSessions > 0:
+            lastSpot = Session.objects.filter(user=user).latest('date').spot
+        else:
+            lastSpot = None
+
+        if len(sessions) > 0:
+            avgSessionLength = averageTimeSurfed(sessions)
+            avgStartTime = averageTime([s.start_time for s in sessions])
+            avgEndTime = averageTime([s.end_time for s in sessions])
+        else:
+            avgSessionLength = 0
+            avgStartTime = 0
+            avgEndTime = 0
+
+        timeSurfed = totalTime(sessions)
+        maxim = ("No Sessions"," ")
+        for key,val in enumerate(timeSurfed.items()):
+            if val[1][1] > 0:
+                maxim = val[1]
+                break
+        timeSurfed = maxim[1]
+        unitsSurfed = maxim[0]
+
 
         users = User.objects.all()
         context = {
             'user':user,
             'sessions':sessions,
+            'reports':reports,
             'numSessions':numSessions,
             'waveCount':waveCount,
             'averageRating':averageRating,
             'lastSpot':lastSpot,
             'avgSessionLength':avgSessionLength,
             'timeSurfed':timeSurfed,
+            'unitsSurfed':unitsSurfed,
             'averageWaveHeight':averageWaveHeight,
             'avgStartTime':avgStartTime,
             'avgEndTime':avgEndTime,
@@ -163,55 +202,14 @@ def profile(request):
         return redirect('logs:login')
 ################################################################################
 
-##### Production Version ################
-# ### Profile View ###############################################################
-# def profile(request):
-#     user = request.user
-#     if not user.is_anonymous:
-#         userImage = user.profile.photo
-#         print(userImage)
-#
-#         sessions = Session.objects.raw('SELECT * FROM logs_session WHERE user_id = %s',[user.id])
-#         reports = Report.objects.raw('SELECT * FROM logs_report WHERE user_id = %s',[user.id])
-#
-#         numSessions = len(sessions)
-#         waveCount = sum([s.waves_caught for s in sessions])
-#         averageRating = np.mean([s.rating for s in sessions])
-#         if len(sessions) > 0:
-#             lastSpot = sessions[len(sessions)-1].spot
-#         else:
-#             lastSpot = None
-#
-#         avgSessionLength = 0 #np.mean([s.end_time - s.start_time for s in sessions])
-#         ## **** STORED FUNCTION for mean **** ##
-#         timeSurfed = 0 #np.mean([s.end_time - s.start_time for s in sessions])
-#         averageWaveHeight = 0 #np.mean([r.wave_height for r in reports])
-#         avgStartTime = 0 #np.mean([s.start_time for s in sessions])
-#         avgEndTime = 0 #np.mean([s.end_time for s in sessions])
-#
-#         context = {
-#             'user':user,
-#             'sessions':sessions,
-#             'numSessions':numSessions,
-#             'waveCount':waveCount,
-#             'averageRating':averageRating,
-#             'lastSpot':lastSpot,
-#             'avgSessionLength':avgSessionLength,
-#             'timeSurfed':timeSurfed,
-#             'averageWaveHeight':averageWaveHeight,
-#             'avgStartTime':avgStartTime,
-#             'avgEndTime':avgEndTime,
-#         }
-#         return render(request, 'logs/profile.html',context)
-#     else:
-#         return redirect('logs:login')
-# ################################################################################
-
 
 
 ### Profile and User Edit View #################################################
 def profileEdit(request):
-    user = request.user
+    if request.user and request.user.username != '':
+        user = request.user
+    else:
+        user = None
     profile = Profile.objects.filter(user=user)[0]
     errors = ''
 
@@ -219,18 +217,18 @@ def profileEdit(request):
         if request.method == 'POST':
             user_edit_form = UserEditForm(data=request.POST, instance=request.user)
             profile_edit_form = ProfileForm(request.POST, request.FILES, instance=profile)
-
             if user_edit_form.is_valid() and profile_edit_form.is_valid():
                 user = user_edit_form.save()
                 profile = profile_edit_form.save()
-                #profile.photo=request.FILES['photo']
                 profile.save()
                 user_summary = UserSummary.objects.filter(username=user.username)
                 if user_summary:
+                    user_summary = user_summary[0]
                     user_summary.username = user.username
                     user_summary.bio = profile.bio
                     user_summary.homespot = profile.homespot
                     user_summary.photo = profile.photo
+                    user_summary.save()
                 else:
                     user_summary = UserSummary(
                         user.id,
@@ -239,7 +237,8 @@ def profileEdit(request):
                         profile.homespot,
                         profile.photo
                         )
-                user_summary.save()
+                    user_summary.save()
+
                 return redirect('logs:profile')
             else:
                 errors = [user_edit_form.errors, profile_edit_form.errors]
@@ -271,16 +270,13 @@ def profileEdit(request):
 
 ### Feed View ##################################################################
 def feed(request):
-    if request.user:
+    if request.user and request.user.username != '':
         user = request.user
     else:
         user = None
 
     sessions = Session.objects.order_by('date')[:30]
     reports = Report.objects.order_by('date')[:30]
-    print(reports)
-    print(sessions)
-
     context = {
         'user':user,
         'sessions':sessions,
@@ -294,6 +290,10 @@ def feed(request):
 
 ### Login Redirect #############################################################
 def login_success(request):
+    if request.user and request.user.username != '':
+        user = request.user
+    else:
+        user = None
     profile = Profile.objects.filter(user=user)[0]
 
     if profile:
@@ -308,7 +308,7 @@ def login_success(request):
 ### Post Session ###############################################################
 def post_session(request):
     errors = ''
-    if request.user:
+    if request.user and request.user.username != '':
         user = request.user
     else:
         return redirect('logs:signin')
@@ -316,6 +316,7 @@ def post_session(request):
         if request.method == 'POST':
             session_post_form = SessionForm(request.POST)
             wave_data_form = WaveDataForm(request.POST)
+            new_spot_form = NewSpotForm(request.POST)
             if session_post_form.is_valid() and wave_data_form.is_valid():
 
                 session = session_post_form.save(commit=False)
@@ -338,6 +339,7 @@ def post_session(request):
         else:
             session_post_form = SessionForm()
             wave_data_form = WaveDataForm()
+            new_spot_form = NewSpotForm()
     else:
         return redirect('logs:signin')
 
@@ -345,18 +347,67 @@ def post_session(request):
         'user':user,
         'session_post_form':session_post_form,
         'wave_data_form':wave_data_form,
+        'new_spot_form':new_spot_form,
         'errors':errors
     }
 
     return render(request, 'logs/post_session.html', context)
 ################################################################################
 
+### Report #####################################################################
+def report(request, report_id):
+    if request.user and request.user.username != '':
+        user = request.user
+    else:
+        user = None
+    report = get_object_or_404(Report, pk=report_id)
+
+    context = {
+        'report':report,
+        'user':user
+    }
+    return render(request, 'logs/report.html', context)
+################################################################################
+
+###Create new spot###############################################################
+def create_spot(request):
+    print("got here")
+    if request.user and request.user.username != '':
+        user = request.user
+    else:
+        user = None
+    print(user)
+    errors = ''
+    if user:
+        if request.method == 'POST':
+            new_spot_form = NewSpotForm(request.POST)
+            if new_spot_form.is_valid():
+                spot = new_spot_form.save()
+                spot.save()
+                return redirect('logs:autoclose')
+            else:
+                errors = new_spot_form.errors
+        else:
+            new_spot_form = NewSpotForm()
+    else:
+        return redirect('logs:signin')
+
+    context = {
+        'user':user,
+        'new_spot_form':new_spot_form,
+        'errors':errors
+    }
+
+    return render(request, 'logs/spot_create.html', context)
+################################################################################
 
 
 ### Post Report ###############################################################
 def post_report(request):
+    raw_op = RawOperations()
+    raw_op.create_trigger()
     errors = ''
-    if request.user:
+    if request.user and request.user.username != '':
         user = request.user
     else:
         return redirect('logs:signin')
@@ -368,7 +419,7 @@ def post_report(request):
             if report_post_form.is_valid() and wave_data_form.is_valid():
 
                 # Calling raw sql to do an INSERT operation with Prepared Statements
-                # raw_op = RawOperations()
+
                 # report_id = raw_op.processReportFormAndReturnId(report_post_form=report_post_form, user=user.id)
                 # report = Report.objects.filter(report_id=report_id)[0]
                 report = report_post_form.save(commit=False)
@@ -408,7 +459,10 @@ def post_report(request):
 
 ### Upload Profile Image #######################################################
 def upload_profile_pic(request):
-    user = request.user
+    if request.user and request.user.username != '':
+        user = request.user
+    else:
+        user = None
     profile = user.profile
     errors = ''
 
@@ -435,16 +489,14 @@ def upload_profile_pic(request):
 
 ### User Summary View #######################################################
 def user_summary(request, username="default"):
-    user = request.user
+    if request.user and request.user.username != '':
+        user = request.user
+    else:
+        user = None
     if user.username != username:
-        #raw_op = RawOperations()
-        #raw_op.create_usersummarys()
-        print(UserSummary.objects.all())
-        print(username)
-        user_summary = UserSummary.objects.filter(username=username)[0]
-        print(user_summary)
-        # user2 = User.objects.filter(username=username)
-        # sessions = Session.objects.filter(user=user2)
+        user_summary = UserSummary.objects.filter(username=username)
+        if len(user_summary) > 0:
+            user_summary = user_summary[0]
         sessions = []
         context = {
             'user_summary' : user_summary,
@@ -453,4 +505,70 @@ def user_summary(request, username="default"):
         return render(request, 'logs/user_summary.html', context)
     else:
         return redirect('logs:profile')
+################################################################################
+
+
+
+## autoclose ############################################################
+def autoclose(request):
+    return render(request, 'logs/autclose.html')
+################################################################################
+
+
+
+### Helper Functions ############################################################
+def averageTimeSurfed(sessions):
+    count = len(sessions)
+    t_hours = 0
+    for session in sessions:
+        t_hours += (session.end_time.hour - session.start_time.hour)*60
+        t_hours += session.end_time.minute - session.start_time.minute
+        t_hours += (session.end_time.second - session.start_time.second)//60
+    return t_hours//count
+
+
+def averageTime(times):
+    total_sec = 0
+    for time in times:
+        seconds_from_midnight = (time.hour*60*60) + (time.minute*60) + time.second
+        total_sec += seconds_from_midnight
+    avg_sec = total_sec//len(times)
+
+    avg_hours = avg_sec//60//60
+    avg_minutes = (avg_sec//60) - (avg_hours*60)
+    avg_sec = avg_sec - (avg_minutes*60) - (avg_hours*60*60)
+
+
+    return datetime.time(hour=avg_hours, minute=avg_minutes, second=avg_sec)
+
+
+def totalTime(sessions):
+    t_seconds = 0
+    for session in sessions:
+        t_seconds += (session.end_time.hour - session.start_time.hour)*60*60
+        t_seconds += (session.end_time.minute - session.start_time.minute)*60
+        t_seconds += session.end_time.second - session.start_time.second
+
+    t_minutes = t_seconds//60
+    t_hours = t_minutes//60
+    t_days = t_hours//24
+    t_weeks = t_days//7
+
+    weeks = t_weeks
+    days = t_days - weeks*7
+    hours = t_hours - days*24
+    minutes = t_minutes - hours*60
+
+    total_time = {
+        'weeks':('Weeks',weeks),
+        'days':('Days',days),
+        'hours':('Hours',hours),
+        'minutes':('Minutes',minutes)
+    }
+
+    return total_time
+
+
+
+
 ################################################################################

@@ -4,13 +4,15 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
+from surflogs.storage_backends import PrivateMediaStorage
+from PIL import Image
+
 
 
 class Spot(models.Model):
     name =                  models.CharField(max_length=200, primary_key=True)
-    ideal_wind =            models.CharField(max_length=200)
     ideal_tide =            models.CharField(max_length=200)
-    ideal_wind =            models.CharField(max_length=200)
+    ideal_wind_dir =        models.CharField(max_length=200)
     ideal_swell_dir	=       models.IntegerField(default=0)
     ideal_swell_height =    models.IntegerField(default=0)
     ideal_swell_period =    models.IntegerField(default=0)
@@ -21,6 +23,7 @@ class Spot(models.Model):
         return self.name
 
 class Wave_Data(models.Model):
+
     wave_data_id =  models.AutoField(primary_key=True)
     date =          models.DateField('date', default=timezone.now)
     time =          models.TimeField('time', default=timezone.now)
@@ -32,6 +35,17 @@ class Wave_Data(models.Model):
     wave_period =   models.CharField(max_length=200)
     wind_speed =    models.CharField(max_length=200)
     conditions =    models.CharField(max_length=200)
+
+
+class Session_Record(models.Model):
+    record_id =     models.AutoField(primary_key=True)
+    user_id =       models.IntegerField(default=0)
+    session_id =    models.IntegerField(default=0)
+    datetime =      models.DateTimeField('date',default=timezone.now)
+
+    def __str__(self):
+        return str(user_id) + " " + str(session_id) +  " " + datetime
+
 
 
 class Session(models.Model):
@@ -47,14 +61,14 @@ class Session(models.Model):
     rating =         models.IntegerField(default=0)
 
     def __str__(self):
-        return "Session at " + self.spot.name + " from " + str(self.start_time) + " to " + str(self.end_time) + " on " + str(self.date) + "."
+        return "Session at " + self.spot.name + " from " + str(self.start_time) + " to " + str(self.end_time) + " on " + str(self.date.date()) + "."
 
 
 class Profile(models.Model):
     user =          models.OneToOneField(User, on_delete=models.CASCADE)
     bio =           models.TextField(max_length=500, blank=True)
     homespot =      models.ForeignKey(Spot, on_delete=models.CASCADE, blank=True, null=True)
-    photo =         models.FileField(upload_to='surflogs-photos', default='profile-photos/None/no-img.jpg')
+    photo =         models.FileField(storage=PrivateMediaStorage(), default='profile-photos/None/no-img.jpg')
 
     def __str__(self):
         return user.first_name + " " + user.last_name
@@ -71,13 +85,13 @@ class Report(models.Model):
     wave_quality = models.CharField(max_length=200)
 
     def __str__(self):
-        return "Report: " + self.spot.name + " at " + str(self.date) + "."
+        return "Report: " + self.spot.name + " at " + str(self.date.date()) + "."
 
 
 class Photo(models.Model):
     photo_id =          models.AutoField(primary_key=True)
     referencing_id =    models.IntegerField(null=False)
-    image =             models.ImageField(upload_to = 'media', default = 'media/None/no-img.jpg')
+    image =             models.ImageField(storage=PrivateMediaStorage(), default = 'surflogs-photos/None/no-img.jpg')
 
 class UserSummary(models.Model):
     user_id =       models.IntegerField(primary_key=True)
@@ -99,3 +113,10 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+
+def create_user_thumbnail(image):
+    im = Image.open(image)
+    w,h = im.size
+    img_size = min(w,h)
+    im = im.crop(box=(0,0, img_size, img_size))
+    return im
