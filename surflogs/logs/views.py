@@ -494,6 +494,9 @@ def user_summary(request, username="default"):
     else:
         user = None
     if user.username != username:
+        assoc_user = User.objects.filter(username=username)[0]
+        # if not assoc_user.hide_stats:
+        #     return redirect('logs:profile')
         user_summary = UserSummary.objects.filter(username=username)
         if len(user_summary) > 0:
             user_summary = user_summary[0]

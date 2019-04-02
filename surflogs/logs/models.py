@@ -23,7 +23,6 @@ class Spot(models.Model):
         return self.name
 
 class Wave_Data(models.Model):
-
     wave_data_id =  models.AutoField(primary_key=True)
     date =          models.DateField('date', default=timezone.now)
     time =          models.TimeField('time', default=timezone.now)

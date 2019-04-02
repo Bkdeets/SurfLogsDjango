@@ -26,7 +26,8 @@
         <h5> {{session.date.date}} </h5>
         <h6> {{session.start_time}} - {{session.end_time}}</h6>
         <br>
-        <h5> {{session.user.username}} </h5>
+        <a href="{% url 'logs:user_summary' session.user.username %}"<h5> {{session.user.username}} </h5></a>
+        <br>
         <br>
         <p> {{session.notes}}</p>
     </div>

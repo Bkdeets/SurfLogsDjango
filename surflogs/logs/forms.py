@@ -92,6 +92,7 @@ class UserEditForm(ModelForm):
         )
 
 class ProfileForm(ModelForm):
+    #hide_stats = forms.Checkbox()
     class Meta:
         model = Profile
         fields = (

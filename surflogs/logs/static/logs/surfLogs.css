@@ -116,6 +116,10 @@
     font-weight: bold;
 }
 
+.theme-text-color {
+    color: #3D6D72;
+}
+
 .mainHeader{
     font-size: 5vh;
     color: white;
@@ -229,11 +233,15 @@
 }
 
 .theme-color {
+    background-color:  #77989C;
+}
+
+.nav-color {
     background-color: #3D6D72;
 }
 
 .btn:hover {
-    background-color: #77989C;
+    background-color: lightblue;
     border-color: transparent;
     -webkit-transition-duration: 0.4s; /* Safari */
     transition-duration: 0.4s;
@@ -253,8 +261,8 @@
 }
 
 .center {
-    margin: 0 auto;
-    width: 125px;
+    display: flex;
+    justify-content: center;
 }
 
 .breaker-50 {

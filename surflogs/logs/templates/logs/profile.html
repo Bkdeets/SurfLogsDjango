@@ -23,8 +23,8 @@
 </head>
 
 
-<body style="background-color: #f7f8f9">
-    <div class="bodywrap">
+<body style="background-color: #edefee">
+    <div class="bodywrap" style="background-color:white">
         <section class="top">
             <div id="row1" class="row">
                 <div class="bio col-md-4">
@@ -108,16 +108,6 @@
                     <ul class="list-group">
                         {% for report in reports %}
                         <li class="list-group-item"><a href="{% url 'logs:report' report.report_id %}">{{ report }}</a></li>
-                        {% endfor %}
-                    </ul>
-                </div>
-        </section>
-        <br>
-        <section class="bottom pb-5 pt-3">
-                <div id="main" class="container">
-                    <ul class="list-group">
-                        {% for user in users %}
-                        <li class="list-group-item"><a href="{% url 'logs:user_summary' user %}">{{ user.username }}</a></li>
                         {% endfor %}
                     </ul>
                 </div>
