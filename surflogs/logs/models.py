@@ -18,6 +18,7 @@ class Spot(models.Model):
     ideal_swell_period =    models.IntegerField(default=0)
     type =                  models.CharField(max_length=200)
     location =              models.CharField(max_length=200)
+    description =           models.TextField(max_length=1000)
 
     def __str__(self):
         return self.name

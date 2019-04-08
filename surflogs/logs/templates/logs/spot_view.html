@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- really want a big header with a spot image -->
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h2> {{ spot.name }} </h2>
+        <br>
+        <p> {{ spot.type }} <p>
+        <p> {{ spot.location }} </p>
+        <p> {{ spot.description }} </p>
+    </div>
+</div>
+<br>
+<div>
+    <div class="row mb-4">
+        <div class="col-md-6 text-center">
+            <p> Sessions Logged</p>
+            <h5>{{ numSessions }}</h5>
+        </div>
+        <div class="col-md-6 text-center">
+            <p> People Surfed Here</p>
+            <h5>{{ numSurfers }}</h5>
+        </div>
+    </div>
+    <div class="row mb-4">
+        <div class="col-md-6 text-center">
+            <p> Best Period </p>
+            <h5> {{ spot.ideal_swell_period }} </h5>
+        </div>
+        <div class="col-md-6 text-center">
+            <p> Best Size </p>
+            <h5> {{ ideal_swell_height }} ft</h5>
+        </div>
+    </div>
+    <div class="row mb-4">
+        <div class="col-md-4 text-center">
+            <p> Best Wind Direction </p>
+            <h5>{{numSessions}}</h5>
+        </div>
+        <div class="col-md-4 text-center">
+            <p> Best Period </p>
+            <h5> {{waveCount}} </h5>
+        </div>
+        <div class="col-md-4 text-center">
+            <p> Time Surfed </p>
+            <h5> {{timeSurfed}} {{unitsSurfed}} </h5>
+        </div>
+    </div>
+</div>
+
+<section class="bottom pb-5 pt-3">
+        <div id="main" class="container">
+            <ul class="list-group">
+                {% for session in sessions %}
+                <li class="list-group-item"><a href="{% url 'logs:detail' session.session_id %}">{{ session }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+</section>
+{% endblock %}

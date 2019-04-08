@@ -22,4 +22,6 @@ urlpatterns = [
     path('<str:username>/summary', views.user_summary, name='user_summary'),
     path('newspot/', views.create_spot, name='new_spot'),
     path('close/', views.autoclose, name='autoclose'),
+    path('sessions/', views.session_list, name='session_list'),
+    path('<str:spot_name>/spot', views.spot_view, name='spot_view')
 ]

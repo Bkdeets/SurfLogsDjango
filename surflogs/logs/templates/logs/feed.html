@@ -1,21 +1,37 @@
 {% extends 'base.html' %}
 {% load static %}
 
+
+
 {% block content %}
-<body>
-    <section class="bottom">
-        <div id="main" class="container">
-            <ul>
-                {% for session in sessions %}
-                <li class="list-group-item"><a href="{% url 'logs:detail' session.session_id %}">{{ session }}</a></li>
-                {% endfor %}
-            </ul>
-            <ul>
-                {% for report in reports %}
-                <li class="list-group-item"><a href="{% url 'logs:report' report.report_id %}">{{ report }}</a></li>
-                {% endfor %}
-            </ul>
+<div class="side-scroll container">
+    <div class="row">
+        <div class="col-md-12">
+            <button class="btn" id="session_filter">Sessions</button>
         </div>
-    </section>
-</body>
+        <div class="col-md-12">
+            <button class="btn" id="report_filter">Reports</button>
+        </div>
+        <div class="col-md-12">
+            <button class="btn">List View</button>
+        </div>
+        <div class="col-md-12">
+            <button class="btn">Card View</button>
+        </div>
+    </div>
+</div>
+<section class="bottom">
+    <div id="main" class="container">
+        <ul>
+            {% for session in sessions %}
+            <li class="list-group-item"><a href="{% url 'logs:detail' session.session_id %}">{{ session }}</a></li>
+            {% endfor %}
+        </ul>
+        <ul>
+            {% for report in reports %}
+            <li class="list-group-item"><a href="{% url 'logs:report' report.report_id %}">{{ report }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</section>
 {% endblock %}

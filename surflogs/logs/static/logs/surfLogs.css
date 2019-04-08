@@ -12,7 +12,6 @@
 .body {
     height:100%;
     font-family: Helvetica Neue;
-    background-color: #edefee;
 }
 
 .down{
@@ -233,7 +232,7 @@
 }
 
 .theme-color {
-    background-color:  #77989C;
+    background-color:  #000000;
 }
 
 .nav-color {
@@ -291,4 +290,18 @@
   bottom: 0;
   left: 0;
   text-align: center;
+}
+
+.a:hover {
+    text-decoration: none;
+}
+
+.side-scroll {
+     width: 150px;
+     position: fixed;
+     z-index: 1;
+     top: 100px;
+     left: 10px;
+     overflow-x: hidden;
+     padding: 8px 0;
 }

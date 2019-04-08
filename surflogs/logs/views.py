@@ -139,7 +139,7 @@ def profile(request):
 
         ## View for user? ##
         ## can make an sql function with this ##
-        sessions = Session.objects.raw('SELECT * FROM logs_session WHERE user_id = %s',[user.id])
+        sessions = Session.objects.raw('SELECT * FROM logs_session WHERE user_id = %s',[user.id])[::-1]
         reports = Report.objects.filter(user_id = user.id)
 
         ## Aggregate queries
@@ -284,6 +284,33 @@ def feed(request):
     }
 
     return render(request, 'logs/feed.html', context)
+################################################################################
+
+
+
+### Session List ##################################################################
+def session_list(request):
+    if request.user and request.user.username != '':
+        user = request.user
+    else:
+        user = None
+
+    sessions = Session.objects.order_by('date')[:30]
+    sessions = sessions[::-1]
+    headers = [
+        'User',
+        'Date',
+        'Spot',
+        'Start',
+        'End',
+        'Rating'
+    ]
+    context = {
+        'user':user,
+        'sessions':sessions,
+        'headers':headers,
+    }
+    return render(request, 'logs/session_list.html', context)
 ################################################################################
 
 
@@ -495,19 +522,42 @@ def user_summary(request, username="default"):
         user = None
     if user.username != username:
         assoc_user = User.objects.filter(username=username)[0]
-        # if not assoc_user.hide_stats:
-        #     return redirect('logs:profile')
         user_summary = UserSummary.objects.filter(username=username)
         if len(user_summary) > 0:
             user_summary = user_summary[0]
         sessions = []
         context = {
             'user_summary' : user_summary,
-            'sessions' : sessions
+            'assoc_user' : assoc_user,
+            'sessions' : sessions,
+            'user' :user
         }
         return render(request, 'logs/user_summary.html', context)
     else:
         return redirect('logs:profile')
+################################################################################
+
+
+
+### Spot View #######################################################
+def spot_view(request, spot_name="default"):
+    if request.user and request.user.username != '':
+        user = request.user
+    else:
+        user = None
+
+    spot = Spot.objects.filter(name=spot_name)[0]
+    sessions = Session.objects.filter(spot=spot)
+    print(spot_name)
+    print(spot)
+    context = {
+        'spot' : spot,
+        'sessions' : sessions,
+        'numSessions' : len(sessions),
+        'numSurfers' : len(sessions), #Opportunity to have an SQL
+        'user' : user
+    }
+    return render(request, 'logs/spot_view.html', context)
 ################################################################################
 
 
