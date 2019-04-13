@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="{% static 'logs/surfLogs.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'logs/profile.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'logs/surfLogs.js' %}" type="text/css">
+    <script src="{% static 'logs/profile.js' %}"></script>
 </head>
 
 
@@ -98,30 +99,24 @@
         <br>
         <div class="row">
             <div class="col-md-10">
-                <h3> Sessions <h3>
+                <h3 id="lower_header"> Sessions <h3>
             </div>
             <div class="col-lg-1 p-0">
-                <button class="btn" id="session_filter">Sessions</button>
+                <button class="btn" id="session_filter" onclick="filter_click('session')">Sessions</button>
             </div>
             <div class="col-lg-1 p-0">
-                <button class="btn" id="report_filter">Reports</button>
+                <button class="btn" id="report_filter" onclick="filter_click('report')">Reports</button>
             </div>
 
         </div>
         <hr>
 
-        {% include "logs/session_list.html" %}
-
-        <section class="bottom pb-5 pt-3">
-
-                <div id="main" class="container">
-                    <ul class="list-group">
-                        {% for report in reports %}
-                        <li class="list-group-item"><a href="{% url 'logs:report' report.report_id %}">{{ report }}</a></li>
-                        {% endfor %}
-                    </ul>
-                </div>
-        </section>
+        <div id="session_table" class="m-5">
+            {% include "logs/session_list.html" %}
+        </div>
+        <div id="report_table" class="m-5"style="display:none">
+            {% include "logs/report_list.html" %}
+        </div>
     </div>
     {% include "logs/footer.html" %}
 

@@ -4,34 +4,30 @@
 
 
 {% block content %}
-<div class="side-scroll container">
+<script src="{% static 'logs/feed.js' %}"></script>
+<div class="side-scroll container shadow rounded">
     <div class="row">
         <div class="col-md-12">
-            <button class="btn" id="session_filter">Sessions</button>
+            <button class="btn w-100" id="session_button" onclick="filter_click('session')">Sessions</button>
         </div>
         <div class="col-md-12">
-            <button class="btn" id="report_filter">Reports</button>
+            <button class="btn w-100" id="report_button" onclick="filter_click('report')">Reports</button>
         </div>
         <div class="col-md-12">
-            <button class="btn">List View</button>
+            <button class="btn w-100" id="list_view">List</button>
         </div>
         <div class="col-md-12">
-            <button class="btn">Card View</button>
+            <button class="btn w-100" id="grid_views">Grid</button>
         </div>
     </div>
 </div>
-<section class="bottom">
-    <div id="main" class="container">
-        <ul>
-            {% for session in sessions %}
-            <li class="list-group-item"><a href="{% url 'logs:detail' session.session_id %}">{{ session }}</a></li>
-            {% endfor %}
-        </ul>
-        <ul>
-            {% for report in reports %}
-            <li class="list-group-item"><a href="{% url 'logs:report' report.report_id %}">{{ report }}</a></li>
-            {% endfor %}
-        </ul>
-    </div>
-</section>
+<h1> Feed </h1>
+<hr>
+
+<div id="session_table" class="m-5">
+    {% include "logs/session_list.html" %}
+</div>
+<div id="report_table" class="m-5"style="display:none">
+    {% include "logs/report_list.html" %}
+</div>
 {% endblock %}

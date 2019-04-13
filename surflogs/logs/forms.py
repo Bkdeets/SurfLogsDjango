@@ -29,6 +29,7 @@ DIRECTIONS = (
     ('SSW','SSW'),
     ('SW','SW'),
     ('WSW','WSW'),
+    ('W','W'),
     ('WNW','WNW'),
     ('NW','NW'),
     ('NNW','NNW'),
@@ -203,5 +204,4 @@ class ImageUploadForm(ModelForm):
         model = Photo
         fields = (
             'image',
-            'referencing_id'
         )

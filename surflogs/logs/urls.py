@@ -16,6 +16,7 @@ urlpatterns = [
     path('login/', LoginView.as_view(), name='login'),
     path('feed/', views.feed, name='feed'),
     path('post_session/', views.post_session, name='post_session'),
+    path('edit_session/<int:session_id>', views.edit_session, name='edit_session'),
     path('post_report/', views.post_report, name='post_report'),
     path('upload_photo/', views.upload_profile_pic, name='upload_photo'),
     path('signup/', views.signup, name='signup'),
@@ -23,5 +24,8 @@ urlpatterns = [
     path('newspot/', views.create_spot, name='new_spot'),
     path('close/', views.autoclose, name='autoclose'),
     path('sessions/', views.session_list, name='session_list'),
-    path('<str:spot_name>/spot', views.spot_view, name='spot_view')
+    path('<str:spot_name>/spot', views.spot_view, name='spot_view'),
+    path('session/<int:session_id>/upload_session_photos', views.add_photos, name='add_photos'),
+
+
 ]

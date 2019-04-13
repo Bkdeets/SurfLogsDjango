@@ -4,10 +4,10 @@
 
 
 {% block content %}
-<h1 class="mt-2">Post Session</h1>
+<h1 class="mt-2">{{ type }} Session</h1>
 <hr>
 
-<form method="post" novalidate>
+<form method="post" enctype="multipart/form-data" novalidate>
     {% csrf_token %}
     <div class=card>
     <div class="card-body">
@@ -91,6 +91,9 @@
                 {{ wave_data_form.wind_speed|as_crispy_field }}
             </div>
         </div>
+    </div>
+    <div class="card-body">
+        {{ image_form|crispy }}
     </div>
     </div>
     <br>

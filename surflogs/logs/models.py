@@ -13,7 +13,7 @@ class Spot(models.Model):
     name =                  models.CharField(max_length=200, primary_key=True)
     ideal_tide =            models.CharField(max_length=200)
     ideal_wind_dir =        models.CharField(max_length=200)
-    ideal_swell_dir	=       models.IntegerField(default=0)
+    ideal_swell_dir	=       models.CharField(max_length=200)
     ideal_swell_height =    models.IntegerField(default=0)
     ideal_swell_period =    models.IntegerField(default=0)
     type =                  models.CharField(max_length=200)
@@ -90,8 +90,10 @@ class Report(models.Model):
 
 class Photo(models.Model):
     photo_id =          models.AutoField(primary_key=True)
-    referencing_id =    models.IntegerField(null=False)
-    image =             models.ImageField(storage=PrivateMediaStorage(), default = 'surflogs-photos/None/no-img.jpg')
+    referencing_id =    models.IntegerField(null=True)
+    image =             models.FileField(storage=PrivateMediaStorage(),default='photos/None/no-img.jpg')
+
+
 
 class UserSummary(models.Model):
     user_id =       models.IntegerField(primary_key=True)
