@@ -17,6 +17,8 @@ from django.utils import timezone
 from PIL import Image
 from bootstrap_modal_forms.generic import BSModalCreateView
 ################################################################################
+SESSION_HEADERS = ["User","Date","Spot","Start","End","Rating"]
+REPORT_HEADERS = ["User","Date","Spot","Time","Quality"]
 
 
 
@@ -287,11 +289,27 @@ def feed(request):
         user = None
 
     sessions = Session.objects.order_by('-date')[:30]
+    sessions_with_image = []
+    for session in sessions:
+        photos = Photo.objects.filter(referencing_id=session.session_id)
+        photo = None
+        if photos:
+            for photo1 in photos:
+                last = str(photo1.image).split("/")[-1]
+                if last != 'no-img.jpg':
+                    photo = photo1
+                    break
+        sessions_with_image.append((session,photo))
+
+
     reports = Report.objects.order_by('-date')[:30]
     context = {
         'user':user,
         'sessions':sessions,
+        'sessions_with_image':sessions_with_image,
         'reports':reports,
+        'session_headers':SESSION_HEADERS,
+        'report_headers':REPORT_HEADERS
     }
 
     return render(request, 'logs/feed.html', context)
@@ -354,9 +372,9 @@ def post_session(request):
         if request.method == 'POST':
             print(request.FILES)
             session_post_form = SessionForm(request.POST)
-            wave_data_form = WaveDataForm(request.POST, request.FILES)
+            wave_data_form = WaveDataForm(request.POST)
             new_spot_form = NewSpotForm(request.POST)
-            image_form = ImageUploadForm(request.POST)
+            image_form = ImageUploadForm(request.POST, request.FILES)
 
             if session_post_form.is_valid() and wave_data_form.is_valid() and image_form.is_valid():
                 session = session_post_form.save(commit=False)
@@ -437,9 +455,9 @@ def edit_session(request, session_id):
                 wave_data.save()
                 session.wave_data = wave_data
                 session.save()
+                print(session.session_id)
                 photo.referencing_id = session.session_id
                 photo.save()
-                print(photo.image)
 
                 return redirect('logs:detail',session.session_id)
 
@@ -521,6 +539,8 @@ def report(request, report_id):
     }
     return render(request, 'logs/report.html', context)
 ################################################################################
+
+
 
 ###Create new spot###############################################################
 def create_spot(request):

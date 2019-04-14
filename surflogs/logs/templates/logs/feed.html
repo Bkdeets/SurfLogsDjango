@@ -1,33 +1,71 @@
-{% extends 'base.html' %}
+{% extends 'feed_base.html' %}
 {% load static %}
 
 
 
 {% block content %}
 <script src="{% static 'logs/feed.js' %}"></script>
-<div class="side-scroll container shadow rounded">
-    <div class="row">
-        <div class="col-md-12">
-            <button class="btn w-100" id="session_button" onclick="filter_click('session')">Sessions</button>
+
+<!--
+<div id="list_view" class="card small-shadow">
+    <div  class="card-body">
+        <div id="session_table" class="m-5">
+            {% include "logs/session_list.html" %}
         </div>
-        <div class="col-md-12">
-            <button class="btn w-100" id="report_button" onclick="filter_click('report')">Reports</button>
-        </div>
-        <div class="col-md-12">
-            <button class="btn w-100" id="list_view">List</button>
-        </div>
-        <div class="col-md-12">
-            <button class="btn w-100" id="grid_views">Grid</button>
+        <div id="report_table" class="m-5" style="display:none">
+            {% include "logs/report_list.html" %}
         </div>
     </div>
 </div>
-<h1> Feed </h1>
-<hr>
+-->
 
-<div id="session_table" class="m-5">
-    {% include "logs/session_list.html" %}
+<div class="container">
+    {% for session in sessions_with_image %}
+    <div id="card_view" class="card mb-5 clickable-card" data-href="{% url 'logs:detail' session.0.session_id %}">
+        <div class="card-body">
+            <h5 class="card-title">{{session.0.user.username}}</h5>
+        </div>
+        {% if session.1 %}
+            <img class="card-img-top" src="{{session.1.image.url}}" alt="No Image">
+        {% else %}
+            <div style="height:10px;"></div>
+        {% endif %}
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <p><b>{{session.0.date.date}}</b></p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <p><b>{{session.0.spot}}</b></p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <p><b>{{session.0.rating}}</b></p>
+                </div>
+            </div>
+            <p class="card-text">{{session.0.notes}}</p>
+        </div>
+    </div>
+    {% endfor %}
 </div>
-<div id="report_table" class="m-5"style="display:none">
-    {% include "logs/report_list.html" %}
+
+<div class="card shadow">
+    <div class="side-scroll shadow rounded card-body bg-white">
+        <div class="row">
+            <div class="col-md-12">
+                <button class="btn w-100" id="session_button" onclick="filter_click('session')">Sessions</button>
+            </div>
+            <div class="col-md-12">
+                <button class="btn w-100" id="report_button" onclick="filter_click('report')">Reports</button>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script>
+    jQuery(document).ready(function($) {
+        $(".clickable-card").click(function() {
+            window.location = $(this).data("href");
+        });
+    });
+</script>
 {% endblock %}

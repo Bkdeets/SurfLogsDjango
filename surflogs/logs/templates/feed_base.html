@@ -33,11 +33,12 @@
 {% include "logs/navigation.html" %}
     <div class="container pb-5">
         <div class="row justify-content-center">
-            <div class="col-9">
+            <div class="col-lg-9">
                 <hr class="mt-0 mb-5">
                 {% block content %}
                 {% endblock %}
             </div>
+            <div class="col-lg-2"></div>
         </div>
     </div>
 {% include 'logs/footer.html' %}
@@ -57,11 +58,6 @@
     });
     $(function() {
         $('#datetimepicker3').datetimepicker({
-            format: 'hh:mm A'
-        });
-    });
-    $(function() {
-        $('#datetimepicker4').datetimepicker({
             format: 'hh:mm A'
         });
     });

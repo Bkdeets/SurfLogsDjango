@@ -11,7 +11,7 @@
 
 .body {
     height:100%;
-    font-family: Helvetica Neue;
+    font-family: Arial Black;
 }
 
 .down{
@@ -236,7 +236,7 @@
 }
 
 .nav-color {
-    background-color: #3D6D72;
+    background-color: #181819;
 }
 
 .btn:hover {
@@ -297,11 +297,11 @@
 }
 
 .side-scroll {
-     width: 150px;
+     width: 200px;
      position: fixed;
      z-index: 1;
      top: 150px;
-     left: 20px;
+     right: 25px;
      overflow-x: hidden;
      padding: 8px;
 }
@@ -331,4 +331,9 @@ column-count: 1;
 -moz-column-width: 100%;
 column-width: 100%;
 }
+}
+
+.centered {
+    margin:0 auto;
+    float:none;
 }

@@ -4,7 +4,7 @@
 <table class="table table-borderless table-hover">
   <thead>
     <tr>
-        {% for header in headers%}
+        {% for header in report_headers%}
         <th scope="col">{{ header }}</th>
         {% endfor %}
     </tr>
@@ -18,7 +18,6 @@
       <td>{{ report.time }}</td>
       <td>{{ report.wave_quality }}</td>
       <td>{{ report.rating }}</td>
-
     </tr>
     {% endfor %}
   </tbody>
