@@ -48,14 +48,52 @@
     {% endfor %}
 </div>
 
+<!--
+
+-->
+
 <div class="card shadow">
-    <div class="side-scroll shadow rounded card-body bg-white">
+    <div class="user-side-scroll shadow rounded card-body bg-white">
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-3">
+                <img class="rounded-circle" src="" height="50px" width="50px">
+            </div>
+            <div class="col-sm-7 vertical-center height-50px mb-0 pb-0">
+                <h4>{{ user.username }}</h4>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <a class="btn w-100" href="{% url 'logs:post_session' %}">Post Session</a>
+            </div>
+            <div class="col-md-12 text-center">
+                <a class="btn w-100" href="{% url 'logs:post_report' %}">Post Report</a>
+            </div>
+            <div class="col-md-12 text-center">
+                <a class="btn w-100" href="{% url 'logs:profile' %}">Profile</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow" >
+    <div class="user-side-scroll shadow rounded card-body bg-white" style="top: 375px;">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h5>Filter by</h5>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <button class="btn w-100" id="session_button" onclick="filter_click('session')">Sessions</button>
             </div>
             <div class="col-md-12">
                 <button class="btn w-100" id="report_button" onclick="filter_click('report')">Reports</button>
+            </div>
+            <div class="col-md-12">
+                <button class="btn w-100" id="report_button" onclick="filter_click('session')">All</button>
             </div>
         </div>
     </div>
