@@ -63,7 +63,6 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'sorl.thumbnail',
     'bootstrap_modal_forms',
-    'surflogs',
     'logs.apps.LogsConfig',
 ]
 
