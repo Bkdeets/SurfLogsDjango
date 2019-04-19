@@ -1,1 +1,1 @@
-web: gunicorn surflogs.wsgi --log-file -
+web: gunicorn surflogs.pywsgi --log-file -
