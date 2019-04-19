@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 from decouple import config
-import django_heroku
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -176,4 +175,3 @@ DATE_INPUT_FORMATS = [
 TIME_INPUT_FORMATS = [
     '%I:%M %p',
 ]
-django_heroku.settings(locals())
