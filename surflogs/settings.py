@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 from decouple import config
-import django_heroku
 import dj_database_url
 
 
@@ -176,5 +175,3 @@ DATE_INPUT_FORMATS = [
 TIME_INPUT_FORMATS = [
     '%I:%M %p',
 ]
-
-django_heroku.settings(locals())
