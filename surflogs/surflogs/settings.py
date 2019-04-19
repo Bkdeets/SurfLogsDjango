@@ -96,7 +96,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'surflogs.pywsgi.application'
+WSGI_APPLICATION = 'surflogs.wsgi.application'
 
 
 # Database
