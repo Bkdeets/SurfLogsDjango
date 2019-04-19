@@ -8,7 +8,7 @@ https://docs.djangoproject.com/en/2.1/howto/deployment/wsgi/
 """
 import os
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "surflogs.surflogs.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "surflogs.settings")
 
 # This application object is used by the development server
 # as well as any WSGI server configured to use this file.
