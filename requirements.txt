@@ -9,3 +9,4 @@ django-storages==1.7.1
 django-widget-tweaks==1.4.3
 sorl-thumbnail==12.5.0
 django-bootstrap-modal-forms==1.4.0
+boto==2.49.0
