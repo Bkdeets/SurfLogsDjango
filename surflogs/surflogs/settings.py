@@ -50,7 +50,6 @@ PRIVATE_FILE_STORAGE = 'mysite.storage_backends.PrivateMediaStorage'
 # Application definition
 
 INSTALLED_APPS = [
-    'logs.apps.LogsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -62,6 +61,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'sorl.thumbnail',
     'bootstrap_modal_forms',
+    'logs.apps.LogsConfig',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
