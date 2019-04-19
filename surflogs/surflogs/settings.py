@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 from decouple import config
+import django_heroku
+import django_database_url
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -105,10 +107,9 @@ WSGI_APPLICATION = 'surflogs.wsgi.application'
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    'default': dj_database_url.config(
+        default=config('DATABASE_URL')
+    )
 }
 
 
@@ -176,3 +177,5 @@ DATE_INPUT_FORMATS = [
 TIME_INPUT_FORMATS = [
     '%I:%M %p',
 ]
+
+django_heroku.settings(locals())
