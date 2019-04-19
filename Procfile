@@ -1,1 +1,1 @@
-web: gunicorn surflogs.surflogs.wsgi --log-file -
+web: gunicorn surflogs.surflogs.wsgi --log-file - --preload
