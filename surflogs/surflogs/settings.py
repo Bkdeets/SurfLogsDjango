@@ -50,7 +50,7 @@ PRIVATE_FILE_STORAGE = 'mysite.storage_backends.PrivateMediaStorage'
 # Application definition
 
 INSTALLED_APPS = [
-    'logs.apps.LogsConfig',
+    'surflogs.logs.apps.LogsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
