@@ -10,3 +10,4 @@ django-widget-tweaks==1.4.3
 sorl-thumbnail==12.5.0
 django-bootstrap-modal-forms==1.4.0
 boto==2.49.0
+boto3==1.9.102
